@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoralSupport.Authentication.Web", "MoralSupport.Authentication.Web\MoralSupport.Authentication.Web.csproj", "{5E2AF5B4-DAF1-4154-A114-E0F3C3621368}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoralSupport.Authentication.Domain", "MoralSupport.Authentication.Domain\MoralSupport.Authentication.Domain.csproj", "{D80E5A54-2F3F-492F-8544-D310619E3936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoralSupport.Authentication.Application", "MoralSupport.Authentication.Application\MoralSupport.Authentication.Application.csproj", "{CA799522-954A-498B-A5DF-1A94B87796C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoralSupport.Authentication.Infrastructure", "MoralSupport.Authentication.Infrastructure\MoralSupport.Authentication.Infrastructure.csproj", "{4831A2A1-7233-4F72-8A84-8C4D87142C56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoralSupport.Authentication.Tests", "MoralSupport.Authentication.Tests\MoralSupport.Authentication.Tests.csproj", "{CEB9AD5D-2535-41E5-9424-C70B09CF69C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E2AF5B4-DAF1-4154-A114-E0F3C3621368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E2AF5B4-DAF1-4154-A114-E0F3C3621368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E2AF5B4-DAF1-4154-A114-E0F3C3621368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E2AF5B4-DAF1-4154-A114-E0F3C3621368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80E5A54-2F3F-492F-8544-D310619E3936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80E5A54-2F3F-492F-8544-D310619E3936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80E5A54-2F3F-492F-8544-D310619E3936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80E5A54-2F3F-492F-8544-D310619E3936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA799522-954A-498B-A5DF-1A94B87796C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA799522-954A-498B-A5DF-1A94B87796C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA799522-954A-498B-A5DF-1A94B87796C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA799522-954A-498B-A5DF-1A94B87796C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4831A2A1-7233-4F72-8A84-8C4D87142C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4831A2A1-7233-4F72-8A84-8C4D87142C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4831A2A1-7233-4F72-8A84-8C4D87142C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4831A2A1-7233-4F72-8A84-8C4D87142C56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB9AD5D-2535-41E5-9424-C70B09CF69C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB9AD5D-2535-41E5-9424-C70B09CF69C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB9AD5D-2535-41E5-9424-C70B09CF69C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB9AD5D-2535-41E5-9424-C70B09CF69C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29909D0E-0FCA-4ACD-926D-F19AD803C823}
+	EndGlobalSection
+EndGlobal
