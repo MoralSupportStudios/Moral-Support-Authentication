@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MoralSupport.Authentication.Application.DTOs;
 
 namespace MoralSupport.Authentication.Application.Interfaces
 {
     public interface IAuthService
     {
+        Task<UserDto> AuthenticateWithFakeGoogleAsync(string fakeEmail);
+        Task<UserDto?> GetUserFromTokenAsync(string token);
     }
 }

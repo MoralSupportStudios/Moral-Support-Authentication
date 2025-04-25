@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using MoralSupport.Authentication.Application.Interfaces;
+using MoralSupport.Authentication.Infrastructure.Auth;
+using MoralSupport.Authentication.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<AuthenticationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IAuthService, StubAuthService>();
 
 var app = builder.Build();
 

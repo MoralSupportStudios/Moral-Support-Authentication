@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoralSupport.Authentication.Application.DTOs
+﻿namespace MoralSupport.Authentication.Application.DTOs
 {
     public class UserDto
     {
+        public int Id { get; set; }
+        public string Email { get; set; } = default!;
+        public string Name { get; set; } = default!;
+        public string Provider { get; set; } = "Stub"; // Hardcoded for now
     }
 }

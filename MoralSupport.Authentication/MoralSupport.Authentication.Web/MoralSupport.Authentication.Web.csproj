@@ -7,8 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MoralSupport.Authentication.Application\MoralSupport.Authentication.Application.csproj" />
     <ProjectReference Include="..\MoralSupport.Authentication.Domain\MoralSupport.Authentication.Domain.csproj" />
+    <ProjectReference Include="..\MoralSupport.Authentication.Infrastructure\MoralSupport.Authentication.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
