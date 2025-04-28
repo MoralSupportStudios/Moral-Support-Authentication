@@ -1,4 +1,18 @@
 ﻿@page
-@model MoralSupport.Authentication.Web.Pages.SignInModel
+@model SignInModel
 @{
+    ViewData["Title"] = "Sign In";
+}
+
+<h1>Sign In</h1>
+
+<form method="post">
+    <label>Email:</label>
+    <input type="email" name="Email" required />
+    <button type="submit">Sign In</button>
+</form>
+
+@if (Model.ResultMessage != null)
+{
+    <p>@Model.ResultMessage</p>
 }
