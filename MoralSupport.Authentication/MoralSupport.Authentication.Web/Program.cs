@@ -10,7 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AuthenticationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IAuthService, StubAuthService>();
+builder.Services.AddScoped<IAuthService, GoogleAuthService>();
 
 var app = builder.Build();
 

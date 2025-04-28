@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MoralSupport.Authentication.Application.Interfaces;
 
@@ -13,27 +12,19 @@ namespace MoralSupport.Authentication.Web.Pages
             _authService = authService;
         }
 
-        [BindProperty]
-        public string Email { get; set; }
+        public string GoogleLoginUrl { get; private set; } = string.Empty;
 
-        public string? ResultMessage { get; set; }
-
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-        }
+            var clientId = await _authService.GetGoogleClientIdAsync();
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid || string.IsNullOrEmpty(Email))
-            {
-                ResultMessage = "Invalid email.";
-                return Page();
-            }
-
-            var user = await _authService.AuthenticateWithFakeGoogleAsync(Email);
-
-            ResultMessage = $"Welcome, {user.Name} ({user.Email})!";
-            return Page();
+            GoogleLoginUrl = $"https://accounts.google.com/o/oauth2/v2/auth" +
+                             $"?client_id={clientId}" +
+                             $"&redirect_uri=https://localhost:7241/signin-google" +
+                             $"&response_type=id_token" +
+                             $"&scope=openid%20email%20profile" +
+                             $"&nonce=12345" +
+                             $"&prompt=select_account";
         }
     }
 }

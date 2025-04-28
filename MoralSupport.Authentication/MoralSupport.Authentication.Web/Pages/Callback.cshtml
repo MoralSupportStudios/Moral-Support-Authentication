@@ -1,4 +1,32 @@
-﻿@page
-@model MoralSupport.Authentication.Web.Pages.CallbackModel
+﻿@page "/signin-google"
+@model CallbackModel
 @{
+    ViewData["Title"] = "Google Login Callback";
+}
+
+<h1>Processing Google Login...</h1>
+
+<div id="status">Please wait...</div>
+
+<script>
+    (function () {
+        const hash = window.location.hash.substring(1); // Remove the #
+        const params = new URLSearchParams(hash);
+        const idToken = params.get('id_token');
+
+        if (idToken) {
+            // Redirect with id_token as query param
+            window.location.href = `/signin-google?id_token=${idToken}`;
+        } else {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('id_token')) {
+                document.getElementById('status').innerText = "Waiting for Google login...";
+            }
+        }
+    })();
+</script>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
 }

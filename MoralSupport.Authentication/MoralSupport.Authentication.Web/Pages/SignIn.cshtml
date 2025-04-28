@@ -6,13 +6,6 @@
 
 <h1>Sign In</h1>
 
-<form method="post">
-    <label>Email:</label>
-    <input type="email" name="Email" required />
-    <button type="submit">Sign In</button>
-</form>
-
-@if (Model.ResultMessage != null)
-{
-    <p>@Model.ResultMessage</p>
-}
+<a href="@Model.GoogleLoginUrl">
+    <button>Sign in with Google</button>
+</a>

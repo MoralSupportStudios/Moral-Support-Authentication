@@ -42,6 +42,16 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             };
         }
 
+        public Task<UserDto> AuthenticateWithGoogleAsync(string idToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetGoogleClientIdAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<UserDto?> GetUserFromTokenAsync(string token)
         {
             // Fake token = email for now
