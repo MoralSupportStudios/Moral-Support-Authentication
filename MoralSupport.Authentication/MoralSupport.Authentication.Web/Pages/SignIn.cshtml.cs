@@ -13,7 +13,7 @@ namespace MoralSupport.Authentication.Web.Pages
         }
 
         public string GoogleLoginUrl { get; private set; } = string.Empty;
-
+        //works for now 
         public async Task OnGetAsync()
         {
             var clientId = await _authService.GetGoogleClientIdAsync();
