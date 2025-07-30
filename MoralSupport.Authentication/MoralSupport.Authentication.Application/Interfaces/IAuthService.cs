@@ -8,6 +8,5 @@ namespace MoralSupport.Authentication.Application.Interfaces
         Task<UserDto> AuthenticateWithGoogleAsync(string idToken);
         Task<UserDto?> GetUserFromTokenAsync(string token);
         Task<string> GetGoogleClientIdAsync();
-
     }
 }
