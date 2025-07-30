@@ -18,14 +18,19 @@ namespace MoralSupport.Authentication.Web.Controllers
         [HttpPost("google")]
         public async Task<IActionResult> GoogleSignIn([FromBody] GoogleSignInRequest request)
         {
+            if (request == null || string.IsNullOrWhiteSpace(request.IdToken))
+            {
+                return BadRequest("Missing IdToken");
+            }
+
             try
             {
                 var user = await _authService.AuthenticateWithGoogleAsync(request.IdToken);
+
                 return Ok(user);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Auth error: " + ex.Message); // DEBUG LINE
                 return Unauthorized(new { message = ex.Message });
             }
         }
