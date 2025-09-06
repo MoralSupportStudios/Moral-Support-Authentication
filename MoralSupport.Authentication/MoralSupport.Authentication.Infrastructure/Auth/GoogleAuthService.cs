@@ -87,10 +87,32 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
                 .FirstOrDefaultAsync(x => x.Provider == "Google");
 
             if (providerSettings == null)
+            {
                 throw new Exception("Google provider settings not found.");
+            }
 
             return providerSettings.ClientId;
         }
+        public async Task<UserDto> GetUserByIdAsync(int userId)
+        {
+            var dto = await _dbContext.Users
+                .AsNoTracking()
+                .Where(u => u.Id == userId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Name = u.Name,
+                    Provider = u.Provider
+                })
+                .SingleOrDefaultAsync();
 
+            if (dto is null)
+            {
+                throw new KeyNotFoundException($"User with id {userId} was not found.");
+            }
+
+            return dto;
+        }
     }
 }

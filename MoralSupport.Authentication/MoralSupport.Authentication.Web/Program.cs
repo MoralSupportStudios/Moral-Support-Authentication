@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AuthenticationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAuthService, GoogleAuthService>();
+builder.Services.AddScoped<ISessionStore, EfSessionStore>();
 
 var app = builder.Build();
 

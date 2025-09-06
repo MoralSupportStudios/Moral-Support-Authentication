@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MoralSupport.Authentication.Application.DTOs;            // UserDto
 using MoralSupport.Authentication.Domain.Entities;            // User
-using MoralSupport.Authentication.Infrastructure;
 using MoralSupport.Authentication.Infrastructure.Persistence;             // AuthenticationDbContext
 
 namespace MoralSupport.Authentication.Web.Controllers;
@@ -26,7 +25,11 @@ public class UsersController : ControllerBase
     [HttpPost("batch")]
     public async Task<ActionResult<List<UserDto>>> Batch([FromBody] int[] ids, CancellationToken ct)
     {
-        if (ids is null || ids.Length == 0) return Ok(new List<UserDto>());
+        if (ids is null || ids.Length == 0)
+        {
+            return Ok(new List<UserDto>());
+        }
+
         var unique = ids.Distinct().ToArray();
 
         var users = await _db.Users.AsNoTracking()
@@ -40,7 +43,11 @@ public class UsersController : ControllerBase
     [HttpGet("find-by-email")]
     public async Task<ActionResult<UserDto>> FindByEmail([FromQuery] string email, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(email)) return BadRequest("email is required");
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest("email is required");
+        }
+
         var u = await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email, ct);
         return u is null ? NotFound() : Ok(ToDto(u));
     }
