@@ -66,5 +66,26 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
                 })
                 .FirstOrDefaultAsync();
         }
+        public async Task<UserDto> GetUserByIdAsync(int userId)
+        {
+            var dto = await _db.Users
+                .AsNoTracking()
+                .Where(u => u.Id == userId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Name = u.Name,
+                    Provider = u.Provider
+                })
+                .SingleOrDefaultAsync();
+
+            if (dto is null)
+            {
+                throw new KeyNotFoundException($"User with id {userId} was not found.");
+            }
+
+            return dto;
+        }
     }
 }
