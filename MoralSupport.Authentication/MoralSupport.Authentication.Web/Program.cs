@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MoralSupport.Authentication.Application.Interfaces;
 using MoralSupport.Authentication.Infrastructure.Auth;
 using MoralSupport.Authentication.Infrastructure.Persistence;
+using MoralSupport.Authentication.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<AuthenticationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAuthService, GoogleAuthService>();
 builder.Services.AddScoped<ISessionStore, EfSessionStore>();
+builder.Services.Configure<SuiteOptions>(builder.Configuration.GetSection("Suite"));
+
 
 var app = builder.Build();
 
