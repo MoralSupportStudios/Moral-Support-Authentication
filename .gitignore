@@ -3,6 +3,14 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Local dev TLS certs (mkcert)
+**/certs/
+*.p12
+*.pem
+*.key
+*.crt
+
+
 # User-specific files
 *.rsuser
 *.suo
@@ -377,6 +385,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local dev TLS certs (mkcert)
+**/certs/
+*.p12
+*.pem
+*.key
+*.crt
+
 
 # VS Code files for those working on multiple tools
 .vscode/*
