@@ -1,4 +1,4 @@
-app = "moral-support-authentication-vnttia"
+app = "moral-support-authentication-vn1tia"
 
 [build]
   dockerfile = "Dockerfile"
