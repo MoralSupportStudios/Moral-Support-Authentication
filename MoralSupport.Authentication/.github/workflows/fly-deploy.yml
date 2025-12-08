@@ -16,6 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Debug Fly apps visible to token (one-time)
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          flyctl auth whoami || true
+          flyctl apps list --org moral-support-studios || true
+          flyctl status -a $FLY_APP || true
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
