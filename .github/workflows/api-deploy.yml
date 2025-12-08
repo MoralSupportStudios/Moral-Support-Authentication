@@ -5,9 +5,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,8 +12,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore MoralSupport.Authentication/MoralSupport.Authentication.sln
+
+      - name: Build
+        run: dotnet build MoralSupport.Authentication/MoralSupport.Authentication.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test MoralSupport.Authentication/MoralSupport.Authentication.sln --configuration Release --no-build --no-restore
+
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@v1
 
+      - name: Debug Fly apps visible to token (one-time)
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          flyctl auth whoami || true
+          flyctl apps list --org moral-support-studios || true
+          flyctl status -a $FLY_APP || true
+
       - name: Deploy to Fly
-        run: flyctl deploy --dockerfile Dockerfile --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP: moral-support-authentication-vn1tia
+        run: flyctl deploy --remote-only --config fly.toml --app $FLY_APP

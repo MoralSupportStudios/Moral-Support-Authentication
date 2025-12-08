@@ -1,30 +1,18 @@
-app = "moralsupport-auth"
-primary_region = "iad"
+app = "moral-support-authentication-vn1tia"
+# Set your primary region if desired (e.g., "iad", "atl", etc.)
+# primary_region = "iad"
 
 [build]
   dockerfile = "Dockerfile"
 
 [env]
-  ASPNETCORE_ENVIRONMENT = "Production"
-  ASPNETCORE_URLS = "http://+:8080"
+  ASPNETCORE_URLS = "http://0.0.0.0:8080"
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = "1"
 
-[[services]]
-  protocol = "tcp"
+[http_service]
   internal_port = 8080
+  force_https = true
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 1
   processes = ["app"]
-
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 50
-    soft_limit = 25
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
