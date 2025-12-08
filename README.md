@@ -2,7 +2,7 @@
 
 Centralized auth for the Moral Support Studios suite. Google SSO + session tokens for all apps, backed by EF Core and Postgres.
 
-## What's in here
+## What's in here?
 - `.NET 8` API with EF Core migrations tuned for Postgres (Supabase-ready).
 - `Dockerfile` + `fly.toml` for Fly.io deployment.
 - GitHub Actions: marketing site to Pages and API deploy to Fly on every push to `main`.
