@@ -22,14 +22,7 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
 
         public async Task<UserDto> AuthenticateWithGoogleAsync(string idToken)
         {
-            //Loading Google Creds from DB
-            var providerSettings = await _dbContext.ExternalProviderSettings
-                .FirstOrDefaultAsync(ps => ps.Provider == "Google");
-
-            if(providerSettings == null)
-            {
-                throw new Exception("Google provider settings not found.");
-            }
+            var providerSettings = await LoadGoogleSettingsAsync();
 
             // Validating token
             var settings = new GoogleJsonWebSignature.ValidationSettings()
@@ -83,15 +76,8 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
         }
         public async Task<string> GetGoogleClientIdAsync()
         {
-            var providerSettings = await _dbContext.ExternalProviderSettings
-                .FirstOrDefaultAsync(x => x.Provider == "Google");
-
-            if (providerSettings == null)
-            {
-                throw new Exception("Google provider settings not found.");
-            }
-
-            return providerSettings.ClientId;
+            var settings = await LoadGoogleSettingsAsync();
+            return settings.ClientId;
         }
         public async Task<UserDto> GetUserByIdAsync(int userId)
         {
@@ -113,6 +99,32 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             }
 
             return dto;
+        }
+
+        private async Task<ExternalProviderSettings> LoadGoogleSettingsAsync()
+        {
+            var clientIdFromEnv = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            var clientSecretFromEnv = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+
+            var providerSettings = await _dbContext.ExternalProviderSettings
+                .FirstOrDefaultAsync(ps => ps.Provider == "Google");
+
+            if (providerSettings == null)
+            {
+                throw new Exception("Google provider settings not found.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(clientIdFromEnv))
+            {
+                providerSettings.ClientId = clientIdFromEnv;
+            }
+
+            if (!string.IsNullOrWhiteSpace(clientSecretFromEnv))
+            {
+                providerSettings.ClientSecret = clientSecretFromEnv;
+            }
+
+            return providerSettings;
         }
     }
 }

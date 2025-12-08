@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -15,9 +15,9 @@ namespace MoralSupport.Authentication.Infrastructure.Persistence.Migrations
                 name: "SsoSessions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ExpiresUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    ExpiresUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -7,13 +7,17 @@ namespace MoralSupport.Authentication.Infrastructure.Persistence
     {
         public static async Task InitializeAsync(AuthenticationDbContext context)
         {
-            if (!await context.ExternalProviderSettings.AnyAsync(p => p.Provider == "Google"))
+            var googleSettings = await context.ExternalProviderSettings
+                .FirstOrDefaultAsync(p => p.Provider == "Google");
+
+            // Seed a placeholder row if it doesn't exist. Secrets should come from env, not be persisted.
+            if (googleSettings == null)
             {
                 context.ExternalProviderSettings.Add(new ExternalProviderSettings
                 {
                     Provider = "Google",
-                    ClientId = "insert-client-id-here-manually",
-                    ClientSecret = "insert-secret-here-manually"
+                    ClientId = "set-with-env",
+                    ClientSecret = "set-with-env"
                 });
 
                 await context.SaveChangesAsync();

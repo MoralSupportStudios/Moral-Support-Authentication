@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using MoralSupport.Authentication.Application.Interfaces;
 using MoralSupport.Authentication.Infrastructure.Auth;
 using MoralSupport.Authentication.Infrastructure.Persistence;
 using MoralSupport.Authentication.Web;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,13 +12,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AuthenticationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = BuildConnectionString(builder.Configuration);
+    options.UseNpgsql(connectionString);
+});
 builder.Services.AddScoped<IAuthService, GoogleAuthService>();
 builder.Services.AddScoped<ISessionStore, EfSessionStore>();
 builder.Services.Configure<SuiteOptions>(builder.Configuration.GetSection("Suite"));
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 
 var app = builder.Build();
+
+// Ensure database is up to date on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AuthenticationDbContext>();
+    db.Database.Migrate();
+    await DbInitializer.InitializeAsync(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -26,6 +45,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -35,3 +55,44 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.Run();
+
+static string BuildConnectionString(ConfigurationManager config)
+{
+    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if (!string.IsNullOrWhiteSpace(databaseUrl))
+    {
+        var uri = new Uri(databaseUrl);
+        var userInfo = uri.UserInfo.Split(':', 2);
+
+        var builder = new NpgsqlConnectionStringBuilder
+        {
+            Host = uri.Host,
+            Port = uri.IsDefaultPort ? 5432 : uri.Port,
+            Username = userInfo.FirstOrDefault() ?? string.Empty,
+            Password = userInfo.Length > 1 ? userInfo[1] : string.Empty,
+            Database = uri.AbsolutePath.Trim('/'),
+            SslMode = SslMode.Require
+        };
+
+        // Preserve any query parameters in DATABASE_URL (e.g., sslmode=require)
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        foreach (var pair in query)
+        {
+            // Only overwrite if the key isn't already populated
+            if (!builder.ContainsKey(pair.Key))
+            {
+                builder[pair.Key] = pair.Value.ToString();
+            }
+        }
+
+        return builder.ConnectionString;
+    }
+
+    var cs = config.GetConnectionString("DefaultConnection");
+    if (string.IsNullOrWhiteSpace(cs))
+    {
+        throw new InvalidOperationException("No database connection string configured. Set DATABASE_URL or ConnectionStrings:DefaultConnection.");
+    }
+
+    return cs;
+}

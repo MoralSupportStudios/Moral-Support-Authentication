@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moral Support Authentication</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <div class="brand">
+        <span class="dot"></span>
+        <span class="word">Moral Support</span>
+        <span class="sub">Authentication</span>
+      </div>
+      <nav>
+        <a href="#stack">Stack</a>
+        <a href="#api">API</a>
+        <a href="#deploy">Deploy</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">Suite-wide identity</p>
+          <h1>Authentication you can deploy in minutes.</h1>
+          <p class="lead">
+            Supabase for data, Fly.io for APIs, GitHub Pages for the marketing layer. One repo, production-ready.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="/swagger" target="_blank" rel="noreferrer">API docs</a>
+            <a class="btn ghost" href="#deploy">Deployment guide</a>
+          </div>
+          <div class="meta">
+            <span>Postgres-first</span>
+            <span>Google SSO</span>
+            <span>SSO cookies</span>
+          </div>
+        </div>
+        <div class="hero__card">
+          <div class="card-header">
+            <span class="pill success"></span>
+            <span class="pill idle"></span>
+            <span class="pill warn"></span>
+          </div>
+          <div class="card-body">
+            <p class="card-title">Live status</p>
+            <ul class="status">
+              <li><span>Supabase</span><strong>Ready</strong></li>
+              <li><span>Fly.io</span><strong>Containerized</strong></li>
+              <li><span>GitHub Pages</span><strong>Static site</strong></li>
+            </ul>
+            <p class="small">Wire up secrets and deploy. CI/CD recipes included.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="stack" class="grid">
+        <div class="panel">
+          <p class="eyebrow">Database</p>
+          <h3>Supabase Postgres</h3>
+          <p>EF Core migrations are tuned for Postgres. Set <code>DATABASE_URL</code> from your Supabase project and the API will self-migrate on boot.</p>
+        </div>
+        <div class="panel">
+          <p class="eyebrow">APIs</p>
+          <h3>Fly.io</h3>
+          <p>Multi-stage Dockerfile, Fly services, health-friendly defaults, and secrets for Google SSO + suite cookies.</p>
+        </div>
+        <div class="panel">
+          <p class="eyebrow">Marketing</p>
+          <h3>GitHub Pages</h3>
+          <p>Static site lives in <code>marketing/</code>; a Pages workflow ships it on every push to <code>main</code>.</p>
+        </div>
+      </section>
+
+      <section id="api" class="section">
+        <div class="section__header">
+          <div>
+            <p class="eyebrow">API quick start</p>
+            <h2>Call the auth service</h2>
+          </div>
+          <a class="link" href="/swagger" target="_blank" rel="noreferrer">Open Swagger →</a>
+        </div>
+        <div class="code-card">
+          <pre><code>// Exchange a Google ID token for a session
+fetch("https://api.moralsupport.example/api/sso/google?returnUrl=https://core.moralsupport.example", {
+  method: "POST",
+  credentials: "include",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams({ idToken })
+});
+
+// Introspect a session from another service
+fetch("https://api.moralsupport.example/api/sso/introspect", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ sessionId })
+});</code></pre>
+        </div>
+      </section>
+
+      <section id="deploy" class="section">
+        <div class="section__header">
+          <div>
+            <p class="eyebrow">Deployment</p>
+            <h2>Three steps to production</h2>
+          </div>
+          <a class="link" href="https://fly.io/docs/" target="_blank" rel="noreferrer">Fly docs</a>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step__number">01</span>
+            <p class="step__title">Provision Supabase</p>
+            <p>Create a project, copy the <code>DATABASE_URL</code>, and add Google credentials to secrets.</p>
+          </div>
+          <div class="step">
+            <span class="step__number">02</span>
+            <p class="step__title">Deploy API to Fly</p>
+            <p>Set secrets (<code>DATABASE_URL</code>, <code>GOOGLE_CLIENT_ID</code>, <code>GOOGLE_CLIENT_SECRET</code>, suite cookie vars) and run <code>fly deploy</code>.</p>
+          </div>
+          <div class="step">
+            <span class="step__number">03</span>
+            <p class="step__title">Publish Pages</p>
+            <p>Push to <code>main</code> to ship the marketing site automatically.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built for the Moral Support Studios suite.</p>
+    </footer>
+  </div>
+</body>
+</html>
