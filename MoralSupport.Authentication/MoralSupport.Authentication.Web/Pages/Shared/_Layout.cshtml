@@ -38,7 +38,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - MoralSupport.Authentication.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            @{
+                var appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0.0";
+            }
+            &copy; 2025 - MoralSupport.Authentication.Web - <a asp-area="" asp-page="/Privacy">Privacy</a> - V@appVersion
         </div>
     </footer>
 
