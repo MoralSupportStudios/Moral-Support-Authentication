@@ -22,35 +22,6 @@ namespace MoralSupport.Authentication.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MoralSupport.Authentication.Domain.Entities.ExternalProviderSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClientSecret")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Provider")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Provider")
-                        .IsUnique();
-
-                    b.ToTable("ExternalProviderSettings");
-                });
-
             modelBuilder.Entity("MoralSupport.Authentication.Domain.Entities.SsoSession", b =>
                 {
                     b.Property<string>("Id")

@@ -27,6 +27,12 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             var s = await _db.SsoSessions.FirstOrDefaultAsync(x => x.Id == sessionId, ct);
             if (s is null || s.ExpiresUtc <= DateTime.UtcNow)
             {
+                if (s is not null)
+                {
+                    _db.SsoSessions.Remove(s);
+                    await _db.SaveChangesAsync(ct);
+                }
+
                 return (false, 0);
             }
 

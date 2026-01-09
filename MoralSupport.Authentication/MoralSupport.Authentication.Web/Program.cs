@@ -8,13 +8,16 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ValidateRequiredEnvVars();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AuthenticationDbContext>(options =>
 {
     var connectionString = BuildConnectionString(builder.Configuration);
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+        npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "migrations"));
 });
 builder.Services.AddScoped<IAuthService, GoogleAuthService>();
 builder.Services.AddScoped<ISessionStore, EfSessionStore>();
@@ -34,7 +37,6 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AuthenticationDbContext>();
     db.Database.Migrate();
-    await DbInitializer.InitializeAsync(db);
 }
 
 // Configure the HTTP request pipeline.
@@ -55,6 +57,24 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.Run();
+
+static void ValidateRequiredEnvVars()
+{
+    var required = new[]
+    {
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+    };
+
+    var missing = required.Where(name => string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(name)))
+        .ToArray();
+
+    if (missing.Length > 0)
+    {
+        throw new InvalidOperationException(
+            $"Missing required environment variable(s): {string.Join(", ", missing)}.");
+    }
+}
 
 static string BuildConnectionString(ConfigurationManager config)
 {

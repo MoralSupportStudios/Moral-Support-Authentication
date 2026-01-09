@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MoralSupport.Authentication.Application.DTOs;
 using MoralSupport.Authentication.Application.Interfaces;
-using MoralSupport.Authentication.Domain.Entities;
 using MoralSupport.Authentication.Infrastructure.Persistence;
 
 namespace MoralSupport.Authentication.Infrastructure.Auth
@@ -15,19 +14,14 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             _dbContext = dbContext;
         }
 
-        public Task<UserDto> AuthenticateWithFakeGoogleAsync(string fakeEmail)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<UserDto> AuthenticateWithGoogleAsync(string idToken)
         {
-            var providerSettings = await LoadGoogleSettingsAsync();
+            var clientId = GetRequiredEnv("GOOGLE_CLIENT_ID");
 
             // Validating token
             var settings = new GoogleJsonWebSignature.ValidationSettings()
             {
-                Audience = new List<string>() { providerSettings.ClientId }
+                Audience = new List<string>() { clientId }
             };
             var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
             if (payload == null)
@@ -74,10 +68,9 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
                 })
                 .FirstOrDefaultAsync();
         }
-        public async Task<string> GetGoogleClientIdAsync()
+        public Task<string> GetGoogleClientIdAsync()
         {
-            var settings = await LoadGoogleSettingsAsync();
-            return settings.ClientId;
+            return Task.FromResult(GetRequiredEnv("GOOGLE_CLIENT_ID"));
         }
         public async Task<UserDto> GetUserByIdAsync(int userId)
         {
@@ -101,30 +94,15 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             return dto;
         }
 
-        private async Task<ExternalProviderSettings> LoadGoogleSettingsAsync()
+        private static string GetRequiredEnv(string name)
         {
-            var clientIdFromEnv = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-            var clientSecretFromEnv = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
-
-            var providerSettings = await _dbContext.ExternalProviderSettings
-                .FirstOrDefaultAsync(ps => ps.Provider == "Google");
-
-            if (providerSettings == null)
+            var value = Environment.GetEnvironmentVariable(name);
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new Exception("Google provider settings not found.");
+                throw new InvalidOperationException($"Missing required environment variable: {name}.");
             }
 
-            if (!string.IsNullOrWhiteSpace(clientIdFromEnv))
-            {
-                providerSettings.ClientId = clientIdFromEnv;
-            }
-
-            if (!string.IsNullOrWhiteSpace(clientSecretFromEnv))
-            {
-                providerSettings.ClientSecret = clientSecretFromEnv;
-            }
-
-            return providerSettings;
+            return value;
         }
     }
 }

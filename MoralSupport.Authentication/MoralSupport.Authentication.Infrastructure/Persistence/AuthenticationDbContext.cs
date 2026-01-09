@@ -10,7 +10,6 @@ namespace MoralSupport.Authentication.Infrastructure.Persistence
         {
         }
         public DbSet<User> Users { get; set; }
-        public DbSet<ExternalProviderSettings> ExternalProviderSettings { get; set; }
         public DbSet<SsoSession> SsoSessions => Set<SsoSession>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,15 +24,6 @@ namespace MoralSupport.Authentication.Infrastructure.Persistence
                 entity.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 entity.Property(x => x.Provider).IsRequired();
                 entity.Property(x => x.ProviderId).IsRequired();
-            });
-
-            modelBuilder.Entity<ExternalProviderSettings>(entity =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.HasIndex(x => x.Provider).IsUnique();
-                entity.Property(x => x.Provider).IsRequired().HasMaxLength(100);
-                entity.Property(x => x.ClientId).IsRequired();
-                entity.Property(x => x.ClientSecret).IsRequired();
             });
 
             modelBuilder.Entity<SsoSession>(e =>
