@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AuthenticationDbContext>(options =>
 {
     var connectionString = BuildConnectionString(builder.Configuration);
     options.UseNpgsql(connectionString, npgsqlOptions =>
-        npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "migrations"));
+        npgsqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
 });
 builder.Services.AddScoped<IAuthService, GoogleAuthService>();
 builder.Services.AddScoped<ISessionStore, EfSessionStore>();
