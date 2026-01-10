@@ -1,0 +1,39 @@
+name: Deploy API to Fly.io
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FLY_APP: moral-support-authentication-vn1tia
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore MoralSupport.Authentication.sln
+
+      - name: Build
+        run: dotnet build MoralSupport.Authentication.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test MoralSupport.Authentication.sln --configuration Release --no-build --no-restore
+
+      - name: Set up Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@v1
+
+      - name: Deploy to Fly
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          APP_VERSION: 0.0.0.${{ github.run_number }}
+        run: |
+          flyctl deploy --remote-only --config fly.toml --app $FLY_APP --env APP_VERSION=$APP_VERSION
