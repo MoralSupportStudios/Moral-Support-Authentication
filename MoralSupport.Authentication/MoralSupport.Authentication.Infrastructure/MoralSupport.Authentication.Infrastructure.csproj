@@ -11,6 +11,7 @@
 	  <Company>MoralSupport</Company>
 	  <Description>Shared implementation of authentication logic for MoralSupport platform</Description>
 	  <PackageId>MoralSupport.Auth.Infrastructure</PackageId>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
   <ItemGroup>
     <ProjectReference Include="..\MoralSupport.Authentication.Application\MoralSupport.Authentication.Application.csproj" />
     <ProjectReference Include="..\MoralSupport.Authentication.Domain\MoralSupport.Authentication.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

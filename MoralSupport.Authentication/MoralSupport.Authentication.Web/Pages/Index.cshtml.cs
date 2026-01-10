@@ -45,7 +45,7 @@ namespace MoralSupport.Authentication.Web.Pages
             }
 
             var versionCore = trimmed.Split(new[] { '+', '-' }, 2)[0];
-            if (Version.TryParse(versionCore, out var parsed))
+            if (System.Version.TryParse(versionCore, out var parsed))
             {
                 var parts = new[] { parsed.Major, parsed.Minor, parsed.Build, parsed.Revision };
                 var length = parsed.Revision >= 0 ? 4 : parsed.Build >= 0 ? 3 : 2;
