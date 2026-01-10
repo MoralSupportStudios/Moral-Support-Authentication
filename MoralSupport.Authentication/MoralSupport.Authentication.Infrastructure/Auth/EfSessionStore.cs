@@ -12,6 +12,7 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
 
         public async Task<string> CreateAsync(int userId, TimeSpan ttl, CancellationToken ct = default)
         {
+            await CleanupExpiredAsync(ct);
             var s = new SsoSession
             {
                 UserId = userId,
@@ -48,6 +49,22 @@ namespace MoralSupport.Authentication.Infrastructure.Auth
             }
 
             _db.Remove(s);
+            await _db.SaveChangesAsync(ct);
+        }
+
+        private async Task CleanupExpiredAsync(CancellationToken ct)
+        {
+            var now = DateTime.UtcNow;
+            var expired = await _db.SsoSessions
+                .Where(s => s.ExpiresUtc <= now)
+                .ToListAsync(ct);
+
+            if (expired.Count == 0)
+            {
+                return;
+            }
+
+            _db.SsoSessions.RemoveRange(expired);
             await _db.SaveChangesAsync(ct);
         }
     }

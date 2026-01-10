@@ -107,6 +107,28 @@ public class SsoController : ControllerBase
             return fallback;
         }
 
+        var allowedSchemes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (_opt.AllowedReturnSchemes is { Length: > 0 })
+        {
+            foreach (var scheme in _opt.AllowedReturnSchemes)
+            {
+                if (!string.IsNullOrWhiteSpace(scheme))
+                {
+                    allowedSchemes.Add(scheme.Trim());
+                }
+            }
+        }
+
+        if (allowedSchemes.Count == 0)
+        {
+            allowedSchemes.Add("https");
+        }
+
+        if (!allowedSchemes.Contains(uri.Scheme))
+        {
+            return fallback;
+        }
+
         var allowedHosts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         if (_opt.AllowedReturnHosts is { Length: > 0 })
         {

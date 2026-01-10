@@ -62,8 +62,7 @@ static void ValidateRequiredEnvVars()
 {
     var required = new[]
     {
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET"
+        "GOOGLE_CLIENT_ID"
     };
 
     var missing = required.Where(name => string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(name)))
