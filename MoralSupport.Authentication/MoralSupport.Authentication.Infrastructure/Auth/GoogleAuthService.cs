@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoralSupport.Authentication.Application.DTOs;
 using MoralSupport.Authentication.Application.Interfaces;
+using MoralSupport.Authentication.Domain.Entities;
 using MoralSupport.Authentication.Infrastructure.Persistence;
 
 namespace MoralSupport.Authentication.Infrastructure.Auth
